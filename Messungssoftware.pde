@@ -1,6 +1,17 @@
 /*
  * @date 08.01.2024
+ * starte die Software mit
+ * export _JAVA_OPTIONS=-Djava.io.tmpdir=$XDG_RUNTIME_DIR
+ * falls der Fehler "UnsatisfiedLinkError: Could not load the jssc library: Couldn't load library library jssc" angezeigt wird.
+ * (jssc wird von dem processing.serial Package verewndet).
  */
+
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -356,6 +367,8 @@ void setup() {
     }
   }
   ).start();
+
+  thread("runServer");
 }
 
 // one-hot encoding
@@ -599,4 +612,37 @@ color colorFromAbsorption(float[] absorptioncopy) {
   //print(totalR, totalG, totalB);
 
   return color(totalR, totalG, totalB);
+}
+
+
+void runServer() {
+
+  try {
+
+    ServerSocket server = new ServerSocket(8080);
+
+    Socket client = server.accept();
+
+    BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+    PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+    String receivedString = "";
+
+    while (!receivedString.equals("terminate")) {
+
+      receivedString = in.readLine();
+      if (receivedString == null)
+        receivedString = "";
+      else
+        println(receivedString);
+      out.println("send data from server");
+    }
+
+    out.close();
+    in.close();
+    client.close();
+    server.close();
+  }
+  catch(IOException e) {
+    e.printStackTrace();
+  }
 }

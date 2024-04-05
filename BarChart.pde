@@ -113,4 +113,16 @@ class BarChart extends Window {
     // 5/6
     line(40, height - 5*height/6, width, height - 5*height/6);
   }
+
+
+  void applyPlot(color[] plotPixels) {
+    // das draw loop beenden, um das alte Diagramm nicht mehr zu zeichnen
+    noLoop();
+    this.loadPixels();
+    for (int i = 0; i < plotPixels.length; i++) {
+      this.pixels[i] = plotPixels[i];
+    }
+    this.updatePixels();
+    redraw();
+  }
 }
