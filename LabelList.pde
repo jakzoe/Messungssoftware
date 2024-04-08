@@ -1,7 +1,7 @@
 class LabelList extends Events {
 
   PVector pos = new PVector();
-  final PVector SIZE = new PVector(200, 40);
+  final PVector SIZE = new PVector(600, 40);
   PVector size = SIZE.copy();
   float maxTextWidth = SIZE.x;
   final int RAND_X = 10;
@@ -14,6 +14,7 @@ class LabelList extends Events {
   int selectedLabel = -1;
   final int MAX_SHOWN_LABELS = int((height-SIZE.y)/SIZE.y);
   final int MAX_MOUSE_SPEED = 50;
+  final int MAX_CHARS = 60;
 
   LabelList() {
 
@@ -122,7 +123,7 @@ class LabelList extends Events {
     if (!onInputBox || started)
       return;
 
-    if (variableInput.length() < 20 && (key >= 'a' && key <= 'z') || (key >= 'A' && key <= 'Z') || key == 'ä' || key == 'Ä'  || key == 'ö' || key == 'Ö' || key == 'ü' || key == 'Ü'  || key == 'ß') {
+    if (variableInput.length() < MAX_CHARS && (key >= 'a' && key <= 'z')  || (key >= '0' && key <= '9')  || (key >= 'A' && key <= 'Z') || key == 'ä' || key == 'Ä'  || key == 'ö' || key == 'Ö' || key == 'ü' || key == 'Ü'  || key == 'ß' || key == ' ' || key == '%' || key == ',') {
       variableInput = variableInput + key;
     } else if (key == BACKSPACE && variableInput.length() > 0) {
       variableInput = variableInput.substring(0, variableInput.length()-1);

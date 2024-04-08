@@ -27,12 +27,12 @@ final PApplet MAIN = this;
 final Functions F = new Functions();
 
 final BarChart barChart = new BarChart();
-final LineChart lineChart = new LineChart();
+final SetLaserConstants setLaserConstants = new SetLaserConstants();
 
 // damit man alle auf einmal freezen/deFreezen kann
 final Window[] APPLETS = new Window[]{
   barChart,
-  lineChart,
+  setLaserConstants,
 };
 
 //für Paths
@@ -83,8 +83,8 @@ int savedDurchgaenge;
 final PVector BUTTON_SIZE = new PVector(100, 70);
 color startColor = color(0, 255, 0);
 Button startButton;
-color lineChartColor = color(189, 212, 255);
-Button lineChartButton;
+color setLaserConstantsColor = color(189, 212, 255);
+Button setLaserConstantsButton;
 color barChartColor = color(189, 212, 255);
 Button barChartButton;
 // den jetzigen Messwert löschen
@@ -272,35 +272,35 @@ void setup() {
     text(started ? "STOP" : "Start", self.pos.x, self.pos.y);
     textSize(20);
     fill(TEXT_COLOR);
-    text(started ? "" : "Select a label", self.pos.x, self.pos.y+self.size.y/1.6);
+    text(started ? "" : "start the measurement", self.pos.x, self.pos.y+self.size.y/1.6);
   }
   );
 
-  lineChartButton = new Button(
+  setLaserConstantsButton = new Button(
     width/1.3, height/2,
     BUTTON_SIZE.x, BUTTON_SIZE.y,
     (self) -> {
 
-    if (lineChart.freezed) {
-      lineChart.deFreeze();
-      lineChartColor =  color(189, 212, 255);
+    if (setLaserConstants.freezed) {
+      setLaserConstants.deFreeze();
+      setLaserConstantsColor =  color(189, 212, 255);
     } else {
-      lineChart.freeze();
-      lineChartColor = color(0, 255, 0);
+      setLaserConstants.freeze();
+      setLaserConstantsColor = color(0, 255, 0);
     }
   }
   ,
     (self) -> {
-    fill(lineChartColor);
+    fill(setLaserConstantsColor);
     // stroke(0);
     noStroke();
     rect(self.pos.x, self.pos.y, self.size.x, self.size.y);
     textSize(24);
     fill(30);
-    text(lineChart.freezed ? "show" : "hide", self.pos.x, self.pos.y);
+    text(setLaserConstants.freezed ? "show" : "hide", self.pos.x, self.pos.y);
     textSize(20);
     fill(TEXT_COLOR);
-    text((lineChart.freezed ? "show" : "hide") + " line-chart", self.pos.x, self.pos.y+self.size.y/1.6);
+    text((setLaserConstants.freezed ? "show" : "hide") + " laser-constants", self.pos.x, self.pos.y+self.size.y/1.6);
   }
   );
 
@@ -345,7 +345,7 @@ void setup() {
   }
   ,
     (self) -> {
-    fill(lineChartColor);
+    fill(setLaserConstantsColor);
     // stroke(0);
     noStroke();
     rect(self.pos.x, self.pos.y, self.size.x, self.size.y);
@@ -392,16 +392,16 @@ void draw() {
 
   startButton.show();
   barChartButton.show();
-  lineChartButton.show();
-  deleteButton.show();
+  setLaserConstantsButton.show();
+  // deleteButton.show();
 
   labelList.show();
 
-  if (DEBUG) {
-    textSize(15);
-    fill(60);
-    text("Debug Mode", width/2, height-20);
-  }
+  //if (DEBUG) {
+  //  textSize(15);
+  //  fill(60);
+  //  text("Debug Mode", width/2, height-20);
+  //}
 }
 
 
@@ -430,7 +430,7 @@ void stop() {
     }
   }
 
-  lineChart.save(getPath(labelList.getLabel() + "_lines.jpg"));
+  setLaserConstants.save(getPath(labelList.getLabel() + "_lines.jpg"));
   barChart.save(getPath(labelList.getLabel() + "_bars.jpg"));
 
   examplesEncoder.save(F.toFloatArray(examples));

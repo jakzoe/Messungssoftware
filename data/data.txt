@@ -1,0 +1,8 @@
+int|Integration Time|1|1|model
+int|Average|1|1|model
+int|Repetitions|1000|1000|model
+int|Irradiation Time|30|30|model
+int|Intensity|100|100|model
+boolean|Continious|false|false|model
+boolean|ND Filter|false|false|model
+int|Timeout|4600|4600|model

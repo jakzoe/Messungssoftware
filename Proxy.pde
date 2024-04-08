@@ -96,7 +96,7 @@ class Proxy {
       //  temp = wert;
       //  lastIndex = NAMES.length-1;
       //  barChart.redraw();
-      //  lineChart.redraw();
+      //  setLaserConstants.redraw();
       //  return;
       //}
 
@@ -109,7 +109,7 @@ class Proxy {
         dataCounter++;
         lastIndex = index;
         barChart.redraw();
-        lineChart.redraw();
+        setLaserConstants.redraw();
 
         if (DEBUG) {
           //println("Debug", NAMES[index], werte[index]);
