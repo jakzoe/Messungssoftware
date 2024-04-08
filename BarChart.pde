@@ -3,6 +3,8 @@ class BarChart extends Window {
   int len, w;
   color oldCol = color(0, 0, 0);
 
+  volatile PImage overlay;
+
   @Override
     void setup() {
 
@@ -21,6 +23,11 @@ class BarChart extends Window {
 
   @Override
     void draw() {
+
+    if (overlay != null) {
+      image(overlay, 0, 0);
+      return;
+    }
 
     background(250);
 
@@ -116,13 +123,25 @@ class BarChart extends Window {
 
 
   void applyPlot(color[] plotPixels) {
-    // das draw loop beenden, um das alte Diagramm nicht mehr zu zeichnen
-    noLoop();
-    this.loadPixels();
-    for (int i = 0; i < plotPixels.length; i++) {
-      this.pixels[i] = plotPixels[i];
+    overlay = createImage(width, height, RGB);
+    overlay.loadPixels();
+
+    int iterator = 0;
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < height; y++) {
+        overlay.pixels[x + y * width] = plotPixels[iterator];
+        iterator++;
+      }
     }
-    this.updatePixels();
-    redraw();
+    overlay.updatePixels();
+  }
+
+  void setFrameSize(int x, int y) {
+    windowResize(x, y);
+  }
+
+  void mousePressed() {
+    if (overlay == null)return;
+    println(overlay.get(mouseX, mouseY));
   }
 }

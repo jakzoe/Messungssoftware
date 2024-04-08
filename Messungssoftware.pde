@@ -13,6 +13,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
+import java.util.Base64;
+import java.util.zip.Inflater;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -620,21 +623,53 @@ void runServer() {
   try {
 
     ServerSocket server = new ServerSocket(8080);
-
     Socket client = server.accept();
 
     BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
     PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-    String receivedString = "";
+    String receivedString = " ";
 
     while (!receivedString.equals("terminate")) {
 
-      receivedString = in.readLine();
-      if (receivedString == null)
-        receivedString = "";
-      else
-        println(receivedString);
-      out.println("send data from server");
+      if ((receivedString = in.readLine()) == null) {
+        receivedString = " ";
+        continue;
+      }
+
+      String[] split = receivedString.split(" ");
+      if (split[0].equals("size")) {
+        barChart.setFrameSize(int(split[1]), int(split[2]));
+        receivedString = " ";
+        continue;
+      }
+
+      byte[] decodedString = Base64.getDecoder().decode(receivedString);
+
+      Inflater decompresser = new Inflater();
+      decompresser.setInput(decodedString);
+      byte[] resultBytes = new byte[10142040];
+      // int[] result = new int[resultBytes.length];
+
+      try {
+        int resultLength = decompresser.inflate(resultBytes);
+        decompresser.end();
+        //for (int i = 0; i < result.length; i++) {
+        //  result[i] = resultBytes[i] + 256;
+        //}
+
+        color[] chartColors = new color[resultLength/3];
+
+        for (int i = 0; i < resultLength; i += 3) {
+          chartColors[i/3] = color(resultBytes[i] + 256, resultBytes[i+1] + 256, resultBytes[i+2] + 256);
+        }
+        barChart.loop();
+        barChart.applyPlot(chartColors);
+      }
+      catch(java.util.zip.DataFormatException e) {
+        e.printStackTrace();
+      }
+      receivedString = " ";
+      // out.println("send data from server");
     }
 
     out.close();

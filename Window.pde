@@ -8,7 +8,7 @@ static abstract class Window extends PApplet {
 
   @Override
     void settings() {
-    size(int(displayWidth/2.03), int(displayHeight/3));
+    size(int(displayWidth/2.03), int(displayHeight/3)); // ,P2D
   }
 
   void setLocation(int x, int y) {
